@@ -52,38 +52,19 @@ class FeedbackController extends Controller
 
         $user = Auth::user();
 
+        $filename = '';
         if ($request->hasFile('file')) {
             $content = $request->file('file');
-//            $disk = Storage::put('feedback-img', $content);
-
             $content->store('public/feedback-img');
             $filename = $content->hashName();
-
-//            return $path;
-//            $disk->putFile('feedback-img', $content);
         }
-//dd($request->file->getClientOriginalName(), $request->file('file')->hashName());
+
         $feedback = new Feedback();
         $feedback->stars = $request->stars;
         $feedback->body = $request->body;
         $feedback->file = $filename;
         $user->feedbacks()->save($feedback);
         return redirect()->back();
-
-
-//        try {
-//            // Save original image
-//            $avatar_image = Image::make($image_file);
-//            $imageFile = $avatar_image->stream();
-//            $imageFile = $imageFile->__toString();
-//            $uploadFile = self::CATEGORY_IMAGE_PATH . $image_name;
-//            Storage::put($uploadFile, $imageFile);
-//
-//        } catch (\Exception $e) {
-//            return $e->getMessage();
-//        }
-
-
     }
 
     /**
